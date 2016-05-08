@@ -9,6 +9,7 @@ local function gnuplot(args)
 	if args.xlabel then cmds:insert(('set xlabel %q'):format(args.xlabel)) end
 	if args.ylabel then cmds:insert(('set ylabel %q'):format(args.ylabel)) end
 	if args.zlabel then cmds:insert(('set zlabel %q'):format(args.zlabel)) end
+	if args.cblabel then cmds:insert(('set cblabel %q'):format(args.cblabel)) end
 	if args.title then cmds:insert(('set title %q'):format(args.title)) end
 	if args.style then cmds:insert('set style '..args.style) end
 	if args.samples then cmds:insert('set samples '..args.samples) end
@@ -46,10 +47,14 @@ local function gnuplot(args)
 				and k ~= 'using'
 				and k ~= 'splot'
 				and k ~= 'datafile'
+				and k ~= 'palette'
 				then
 					if k == 'title' then v = ('%q'):format(v) end
 					plotcmd = plotcmd..' '..k..' '..v
 				end
+			end
+			if plot.palette then
+				plotcmd = plotcmd .. ' palette'
 			end
 			if plot.splot then
 				splotcmds:insert(plotcmd)
@@ -91,10 +96,13 @@ local function gnuplot(args)
 		end
 		file[griddatafilename] = data:concat()
 	end
-	
-	if not os.execute('gnuplot '..cmdsfilename) then
-		error('cmds:\n'..file[cmdsfilename]:trim():split'\n':map(function(l,i) return i..':\t'..l end):concat'\n')
-	end
+
+	-- some gnuplot errors are errors, some are just warnings ...
+	--if not 
+	os.execute('gnuplot '..cmdsfilename) 
+	--then
+	--	error('cmds:\n'..file[cmdsfilename]:trim():split'\n':map(function(l,i) return i..':\t'..l end):concat'\n')
+	--end
 
 	file[cmdsfilename] = nil
 	file[datafilename] = nil
