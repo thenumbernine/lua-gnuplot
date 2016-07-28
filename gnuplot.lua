@@ -16,6 +16,11 @@ local function gnuplot(args)
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour') end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
+	if args.format then
+		for k,v in pairs(args.format) do
+			cmds:insert('set format '..k..' '..('%q'):format(v))
+		end
+	end
 	for i=1,#args do
 		if type(args[i]) == 'string' then
 			cmds:insert(args[i])
