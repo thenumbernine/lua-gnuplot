@@ -2,9 +2,13 @@ local file = require 'ext.file'
 local table = require 'ext.table'
 
 local function gnuplot(args)
+	local persist = args.persist
+	
 	local cmds = table()
-	cmds:insert('set terminal png size 800,600')
-	cmds:insert("set output '"..args.output.."'")
+	if not persist then
+		cmds:insert('set terminal png size 800,600')
+		cmds:insert("set output '"..assert(args.output).."'")
+	end
 	if args.log then cmds:insert('set log '..args.log) end
 	if args.xlabel then cmds:insert(('set xlabel %q'):format(args.xlabel)) end
 	if args.ylabel then cmds:insert(('set ylabel %q'):format(args.ylabel)) end
@@ -70,6 +74,9 @@ local function gnuplot(args)
 	end
 	if #plotcmds > 0 then cmds:insert('plot '..plotcmds:concat(', ')) end
 	if #splotcmds > 0 then cmds:insert('splot '..splotcmds:concat(', ')) end
+	if persist then
+		cmds:insert'pause -1'
+	end
 	local cmdsfilename = 'cmds.txt'
 	file[cmdsfilename] = cmds:concat('\n')
 
@@ -104,7 +111,13 @@ local function gnuplot(args)
 
 	-- some gnuplot errors are errors, some are just warnings ...
 	--if not 
-	os.execute('gnuplot '..cmdsfilename) 
+	local cmdlineargs = table{'gnuplot'}
+	if persist then
+		cmdlineargs:insert'-p'
+	end
+	cmdlineargs:insert(cmdsfilename)
+	local cmd = cmdlineargs:concat' '
+	os.execute(cmd)
 	--then
 	--	error('cmds:\n'..file[cmdsfilename]:trim():split'\n':map(function(l,i) return i..':\t'..l end):concat'\n')
 	--end
