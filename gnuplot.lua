@@ -20,6 +20,12 @@ local function gnuplot(args)
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour') end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
+	if args.xtics then cmds:insert('set xtics '..args.xtics) end
+	if args.ytics then cmds:insert('set ytics '..args.ytics) end
+	if args.ztics then cmds:insert('set ztics '..args.ztics) end
+	if args.x2tics then cmds:insert('set x2tics '..args.x2tics) end
+	if args.y2tics then cmds:insert('set y2tics '..args.y2tics) end
+	if args.cbtics then cmds:insert('set cbtics '..args.cbtics) end
 	if args.format then
 		for k,v in pairs(args.format) do
 			cmds:insert('set format '..k..' '..('%q'):format(v))
