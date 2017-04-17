@@ -49,12 +49,13 @@ local function gnuplot(args)
 			elseif plot.using then
 				plotdatafile = plot.splot and griddatafilename or datafilename
 			end
+			local j=1
 			local plotcmd
 			if plotdatafile then
 				plotcmd =  "'"..plotdatafile.."'"
 				if plot.using then plotcmd = plotcmd .. " using "..plot.using end
 			else
-				plotcmd = plot[1]
+				plotcmd = plot[j] j=j+1
 			end
 			
 			for k,v in pairs(plot) do
@@ -75,6 +76,10 @@ local function gnuplot(args)
 				splotcmds:insert(plotcmd)
 			else
 				plotcmds:insert(plotcmd)
+			end
+			-- add the rest last
+			for k=j,#plot do
+				plotcmds:insert(plot[j])
 			end
 		end
 	end
