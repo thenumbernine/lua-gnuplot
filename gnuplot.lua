@@ -83,7 +83,13 @@ local function gnuplot(args)
 			end
 		end
 	end
-	if #plotcmds > 0 then cmds:insert('plot '..plotcmds:concat(', ')) end
+	if #plotcmds > 0 then 
+		local xrange = ''
+		if args.xrange then
+			xrange = '[' .. table.concat(args.xrange, ':') .. '] '
+		end
+		cmds:insert('plot '..xrange..plotcmds:concat(', ')) 
+	end
 	if #splotcmds > 0 then cmds:insert('splot '..splotcmds:concat(', ')) end
 	if persist then
 		cmds:insert'pause -1'
