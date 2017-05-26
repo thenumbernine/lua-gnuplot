@@ -6,7 +6,8 @@ local function gnuplot(args)
 	
 	local cmds = table()
 	if not persist then
-		cmds:insert('set terminal png size 800,600')
+		local terminal = args.terminal or 'png size 800,600'
+		cmds:insert('set terminal '..terminal)
 		cmds:insert("set output '"..assert(args.output).."'")
 	end
 	if args.log then cmds:insert('set log '..args.log) end
