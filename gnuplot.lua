@@ -48,7 +48,10 @@ local function gnuplot(args)
 			if plot.datafile then
 				plotdatafile = plot.datafile
 			elseif plot.using then
-				plotdatafile = plot.splot and griddatafilename or datafilename
+				-- why use separate filenames anyways?
+				plotdatafile = (plot.splot or plot.palette)
+					and griddatafilename
+					or datafilename
 			end
 			local j=1
 			local plotcmd
