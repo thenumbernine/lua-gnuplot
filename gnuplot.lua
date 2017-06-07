@@ -1,5 +1,6 @@
 local file = require 'ext.file'
 local table = require 'ext.table'
+local range = require 'ext.range'
 
 local function gnuplot(args)
 	local persist = args.persist
