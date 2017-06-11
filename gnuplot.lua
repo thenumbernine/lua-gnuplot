@@ -88,14 +88,17 @@ local function gnuplot(args)
 			end
 		end
 	end
-	if #plotcmds > 0 then 
-		local xrange = ''
-		if args.xrange then
-			xrange = '[' .. table.concat(args.xrange, ':') .. '] '
+	
+	local plotrange = ''
+	for _,field in ipairs{'xrange', 'yrange', 'zrange'} do
+		if args[field] then
+			plotrange = plotrange .. '[' .. table.concat(args[field], ':') .. ']'
 		end
-		cmds:insert('plot '..xrange..plotcmds:concat(', ')) 
 	end
-	if #splotcmds > 0 then cmds:insert('splot '..splotcmds:concat(', ')) end
+	if plotrange ~= '' then plotrange = plotrange .. ' ' end
+	
+	if #plotcmds > 0 then cmds:insert('plot '..plotrange..plotcmds:concat(', ')) end
+	if #splotcmds > 0 then cmds:insert('splot '..plotrange..splotcmds:concat(', ')) end
 	if persist then
 		cmds:insert'pause -1'
 	end
