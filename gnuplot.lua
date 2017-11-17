@@ -21,7 +21,11 @@ local function gnuplot(args)
 	if args.samples then cmds:insert('set samples '..args.samples) end
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour') end
+	if args.cntrparam then cmds:insert('set cntrparam '..args.cntrparam) end
+	if args.pm3d then cmds:insert('set pm3d '..args.pm3d) end
+	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
+	if args.cbrange then cmds:insert('set cbrange ['..table.concat(args.cbrange, ':')..']') end
 	if args.xtics then cmds:insert('set xtics '..args.xtics) end
 	if args.ytics then cmds:insert('set ytics '..args.ytics) end
 	if args.ztics then cmds:insert('set ztics '..args.ztics) end
@@ -31,6 +35,11 @@ local function gnuplot(args)
 	if args.format then
 		for k,v in pairs(args.format) do
 			cmds:insert('set format '..k..' '..('%q'):format(v))
+		end
+	end
+	if args.unset then
+		for _,cmd in ipairs(args.unset) do
+			cmds:insert('unset '..cmd)
 		end
 	end
 	for i=1,#args do
