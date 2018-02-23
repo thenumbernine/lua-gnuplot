@@ -41,9 +41,9 @@ gnuplot{
 ``` Lua
 local x, y = {}, {}
 for i=1,100 do
-	local xi = (i-.5)/100 * 10 - 5
+	local xi = (i-.5)/100 * 30 - 15
 	table.insert(x,xi)
-	local yi = (i-.5)/100 * 10 - 5
+	local yi = (i-.5)/100 * 30 - 15
 	table.insert(y,yi)
 end
 local z = {}
