@@ -17,7 +17,15 @@ local function gnuplot(args)
 	if args.zlabel then cmds:insert(('set zlabel %q'):format(args.zlabel)) end
 	if args.cblabel then cmds:insert(('set cblabel %q'):format(args.cblabel)) end
 	if args.title then cmds:insert(('set title %q'):format(args.title)) end
-	if args.style then cmds:insert('set style '..args.style) end
+	if args.style then 
+		if type(args.style) == 'table' then
+			for _,style in ipairs(args.style) do
+				cmds:insert('set style '..style) 
+			end
+		else
+			cmds:insert('set style '..args.style) 
+		end
+	end
 	if args.samples then cmds:insert('set samples '..args.samples) end
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour') end
