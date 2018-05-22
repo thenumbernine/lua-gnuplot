@@ -60,8 +60,8 @@ local function gnuplot(args)
 	end
 	local plotcmds = table()
 	local splotcmds = table()
-	local datafilename = 'data.txt'
-	local griddatafilename = 'griddata.txt'
+	local datafilename = '___tmp.gnuplot.data.txt'
+	local griddatafilename = '___tmp.gnuplot.griddata.txt'
 	for i=1,#args do
 		if type(args[i]) == 'table' then
 			local plot = args[i]
@@ -122,7 +122,7 @@ local function gnuplot(args)
 	if persist then
 		cmds:insert'pause -1'
 	end
-	local cmdsfilename = 'cmds.txt'
+	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
 	file[cmdsfilename] = cmds:concat('\n')
 
 	if args.data then
