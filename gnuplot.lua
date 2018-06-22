@@ -28,9 +28,9 @@ local function gnuplot(args)
 	end
 	if args.samples then cmds:insert('set samples '..args.samples) end
 	if args.view then cmds:insert('set view '..args.view) end
-	if args.contour then cmds:insert('set contour') end
+	if args.contour then cmds:insert('set contour'..(args.contour == true and '' or ' '..args.contour)) end
 	if args.cntrparam then cmds:insert('set cntrparam '..args.cntrparam) end
-	if args.pm3d then cmds:insert('set pm3d '..args.pm3d) end
+	if args.pm3d then cmds:insert('set pm3d'..(args.pm3d == true and '' or ' '..args.pm3d)) end
 	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
 	if args.cbrange then cmds:insert('set cbrange ['..table.concat(args.cbrange, ':')..']') end
