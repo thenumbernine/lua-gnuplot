@@ -163,7 +163,6 @@ local function gnuplot(args)
 	local cmd = cmdlineargs:concat' '
 	
 	local results = {os.execute(cmd)}
-	--[[ I'm not going to fail on errors, because gnuplot errors if you pass it an empty file ...
 	if not results[1] then
 		io.stderr:write('cmds:\n'
 			..require 'template.showcode'(file[cmdsfilename])..'\n'
@@ -171,7 +170,6 @@ local function gnuplot(args)
 			..tostring(results[1])..'\n'
 			..tostring(results[2]))
 	end
-	--]]
 
 	file[cmdsfilename] = nil
 	file[datafilename] = nil
