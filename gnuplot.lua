@@ -122,6 +122,11 @@ local function gnuplot(args)
 	if persist then
 		cmds:insert'pause -1'
 	end
+	
+	-- without this there's a memory leak bug in later gnuplot versions 
+	-- https://stackoverflow.com/questions/18654966/how-can-i-prevent-gnuplot-from-eating-my-memory
+	cmds:insert'set output'	
+	
 	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
 	file[cmdsfilename] = cmds:concat('\n')
 
@@ -168,7 +173,7 @@ local function gnuplot(args)
 			..require 'template.showcode'(file[cmdsfilename])..'\n'
 			..'failed with error:\n'
 			..tostring(results[1])..'\n'
-			..tostring(results[2]))
+			..tostring(results[2])..'\n')
 	end
 
 	file[cmdsfilename] = nil
