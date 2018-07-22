@@ -4,7 +4,7 @@ local range = require 'ext.range'
 
 local function gnuplot(args)
 	local persist = args.persist
-	
+
 	local cmds = table()
 	if not persist then
 		local terminal = args.terminal or 'png size 800,600'
@@ -155,17 +155,21 @@ local function gnuplot(args)
 	end
 
 	-- some gnuplot errors are errors, some are just warnings ...
-	--if not 
 	local cmdlineargs = table{'gnuplot'}
 	if persist then
 		cmdlineargs:insert'-p'
 	end
 	cmdlineargs:insert(cmdsfilename)
 	local cmd = cmdlineargs:concat' '
-	os.execute(cmd)
-	--then
-	--	error('cmds:\n'..file[cmdsfilename]:trim():split'\n':map(function(l,i) return i..':\t'..l end):concat'\n')
-	--end
+	
+	local results = {os.execute(cmd)}
+	if not results[1] then
+		io.stderr:write('cmds:\n'
+			..require 'template.showcode'(file[cmdsfilename])..'\n'
+			..'failed with error:\n'
+			..tostring(results[1])..'\n'
+			..tostring(results[2]))
+	end
 
 	file[cmdsfilename] = nil
 	file[datafilename] = nil
