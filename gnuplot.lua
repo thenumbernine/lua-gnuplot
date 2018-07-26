@@ -168,13 +168,17 @@ local function gnuplot(args)
 	local cmd = cmdlineargs:concat' '
 	
 	local results = {os.execute(cmd)}
-	if not results[1] then
+	if args.warnOnErrors and results[1] then
 		io.stderr:write('cmds:\n'
 			..require 'template.showcode'(file[cmdsfilename])..'\n'
 			..'failed with error:\n'
 			..tostring(results[1])..'\n'
 			..tostring(results[2])..'\n')
 	end
+
+	if args.savecmds then file[args.savecmds] = file[cmdsfilename] end
+	if args.savedata then file[args.savedata] = file[datafilename] end
+	if args.savegriddata then file[args.savegriddata] = file[griddatafilename] end
 
 	file[cmdsfilename] = nil
 	file[datafilename] = nil
