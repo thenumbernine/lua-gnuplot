@@ -61,7 +61,6 @@ local function gnuplot(args)
 	local plotcmds = table()
 	local splotcmds = table()
 	local datafilename = '___tmp.gnuplot.data.txt'
-	local griddatafilename = '___tmp.gnuplot.griddata.txt'
 	for i=1,#args do
 		if type(args[i]) == 'table' then
 			local plot = args[i]
@@ -69,10 +68,7 @@ local function gnuplot(args)
 			if plot.datafile then
 				plotdatafile = plot.datafile
 			elseif plot.using then
-				-- why use separate filenames anyways?
-				plotdatafile = (plot.splot or plot.palette)
-					and griddatafilename
-					or datafilename
+				plotdatafile = datafilename
 			end
 			local j=1
 			local plotcmd
@@ -91,7 +87,11 @@ local function gnuplot(args)
 				and k ~= 'palette'
 				then
 					if k == 'title' then v = ('%q'):format(v) end
-					plotcmd = plotcmd..' '..k..' '..v
+					if v == true then
+						plotcmd = plotcmd..' '..k
+					else
+						plotcmd = plotcmd..' '..k..' '..v
+					end
 				end
 			end
 			if plot.palette then
@@ -156,7 +156,7 @@ local function gnuplot(args)
 			end
 			data:insert('\n')
 		end
-		file[griddatafilename] = data:concat()
+		file[datafilename] = data:concat()
 	end
 
 	-- some gnuplot errors are errors, some are just warnings ...
@@ -178,11 +178,9 @@ local function gnuplot(args)
 
 	if args.savecmds then file[args.savecmds] = file[cmdsfilename] end
 	if args.savedata then file[args.savedata] = file[datafilename] end
-	if args.savegriddata then file[args.savegriddata] = file[griddatafilename] end
 
 	file[cmdsfilename] = nil
 	file[datafilename] = nil
-	file[griddatafilename] = nil
 end
 
 return gnuplot
