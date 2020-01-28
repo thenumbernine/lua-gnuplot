@@ -27,6 +27,7 @@ local function gnuplot(args)
 			cmds:insert('set style '..args.style) 
 		end
 	end
+	if args.parametric then cmds:insert('set parametric') end
 	if args.samples then cmds:insert('set samples '..args.samples) end
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour'..(args.contour == true and '' or ' '..args.contour)) end
@@ -49,6 +50,12 @@ local function gnuplot(args)
 			cmds:insert('set format '..k..' '..('%q'):format(v))
 		end
 	end
+	
+	if args.xrange then cmds:insert('set xrange ['..args.xrange[1]..':'..args.xrange[2]..']') end
+	if args.yrange then cmds:insert('set yrange ['..args.yrange[1]..':'..args.yrange[2]..']') end
+	if args.zrange then cmds:insert('set zrange ['..args.zrange[1]..':'..args.zrange[2]..']') end
+	if args.trange then cmds:insert('set trange ['..args.trange[1]..':'..args.trange[2]..']') end
+
 	if args.unset then
 		for _,cmd in ipairs(args.unset) do
 			cmds:insert('unset '..cmd)
@@ -109,17 +116,9 @@ local function gnuplot(args)
 			end
 		end
 	end
-	
-	local plotrange = ''
-	for _,field in ipairs{'xrange', 'yrange', 'zrange'} do
-		if args[field] then
-			plotrange = plotrange .. '[' .. table.concat(args[field], ':') .. ']'
-		end
-	end
-	if plotrange ~= '' then plotrange = plotrange .. ' ' end
-	
-	if #plotcmds > 0 then cmds:insert('plot '..plotrange..plotcmds:concat(', ')) end
-	if #splotcmds > 0 then cmds:insert('splot '..plotrange..splotcmds:concat(', ')) end
+
+	if #plotcmds > 0 then cmds:insert('plot '..plotcmds:concat(', ')) end
+	if #splotcmds > 0 then cmds:insert('splot '..splotcmds:concat(', ')) end
 	if persist then
 		cmds:insert'pause -1'
 	end

@@ -1,6 +1,10 @@
-A gnuplot wrapper for Lua
+A gnuplot wrapper for Lua.
 
-Examples:
+### Dependencies:
+
+- https://github.com/thenumbernine/lua-ext
+
+### Examples:
 
 ``` Lua
 require 'gnuplot'{
