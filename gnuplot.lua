@@ -42,6 +42,7 @@ local function gnuplot(args)
 	if args.x2tics then cmds:insert('set x2tics '..args.x2tics) end
 	if args.y2tics then cmds:insert('set y2tics '..args.y2tics) end
 	if args.cbtics then cmds:insert('set cbtics '..args.cbtics) end
+	if args.boxwidth then cmds:insert('set boxwidth '..args.boxwidth) end
 	if args.xdata then cmds:insert('set xdata '..args.xdata) end
 	if args.ydata then cmds:insert('set ydata '..args.ydata) end
 	if args.timefmt then cmds:insert('set timefmt '..('%q'):format(args.timefmt)) end
@@ -136,7 +137,16 @@ local function gnuplot(args)
 		for i=1,numcols do
 			local sep = ''
 			for j=1,#args.data do
-				data:insert(sep..(args.data[j][i] or '-'))
+				local s
+				local t = type(args.data[j][i])
+				if t == 'number' then
+					s = args.data[j][i]
+				elseif t== 'string' then
+					s = ('%q'):format(args.data[j][i])
+				else
+					s = '-'
+				end
+				data:insert(sep..s)
 				sep = '\t'
 			end
 			data:insert('\n')
