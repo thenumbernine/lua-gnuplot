@@ -31,6 +31,7 @@ local function gnuplot(args)
 	if args.samples then cmds:insert('set samples '..args.samples) end
 	if args.view then cmds:insert('set view '..args.view) end
 	if args.contour then cmds:insert('set contour'..(args.contour == true and '' or ' '..args.contour)) end
+	if args.isosamples then cmds:insert('set isosamples'..(args.isosamples == true and '' or ' '..args.isosamples)) end
 	if args.cntrparam then cmds:insert('set cntrparam '..args.cntrparam) end
 	if args.pm3d then cmds:insert('set pm3d'..(args.pm3d == true and '' or ' '..args.pm3d)) end
 	if args.palette then cmds:insert('set palette '..args.palette) end
@@ -56,6 +57,8 @@ local function gnuplot(args)
 	if args.yrange then cmds:insert('set yrange ['..args.yrange[1]..':'..args.yrange[2]..']') end
 	if args.zrange then cmds:insert('set zrange ['..args.zrange[1]..':'..args.zrange[2]..']') end
 	if args.trange then cmds:insert('set trange ['..args.trange[1]..':'..args.trange[2]..']') end
+	if args.urange then cmds:insert('set urange ['..args.urange[1]..':'..args.urange[2]..']') end
+	if args.vrange then cmds:insert('set vrange ['..args.vrange[1]..':'..args.vrange[2]..']') end
 
 	if args.unset then
 		for _,cmd in ipairs(args.unset) do
