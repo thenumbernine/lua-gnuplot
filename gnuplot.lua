@@ -18,13 +18,13 @@ local function gnuplot(args)
 	if args.cblabel then cmds:insert(('set cblabel %q'):format(args.cblabel)) end
 	if args.title then cmds:insert(('set title %q'):format(args.title)) end
 	if args.key then cmds:insert(('set key %s'):format(args.key)) end
-	if args.style then 
+	if args.style then
 		if type(args.style) == 'table' then
 			for _,style in ipairs(args.style) do
-				cmds:insert('set style '..style) 
+				cmds:insert('set style '..style)
 			end
 		else
-			cmds:insert('set style '..args.style) 
+			cmds:insert('set style '..args.style)
 		end
 	end
 	if args.parametric then cmds:insert('set parametric') end
@@ -53,12 +53,21 @@ local function gnuplot(args)
 		end
 	end
 	
-	if args.xrange then cmds:insert('set xrange ['..args.xrange[1]..':'..args.xrange[2]..']') end
-	if args.yrange then cmds:insert('set yrange ['..args.yrange[1]..':'..args.yrange[2]..']') end
-	if args.zrange then cmds:insert('set zrange ['..args.zrange[1]..':'..args.zrange[2]..']') end
-	if args.trange then cmds:insert('set trange ['..args.trange[1]..':'..args.trange[2]..']') end
-	if args.urange then cmds:insert('set urange ['..args.urange[1]..':'..args.urange[2]..']') end
-	if args.vrange then cmds:insert('set vrange ['..args.vrange[1]..':'..args.vrange[2]..']') end
+	for _,letter in ipairs{'x', 'y', 'z', 't', 'u', 'v'} do
+		local field = letter..'range'
+		local value = args[field]
+		if value then
+			local cmd = 'set '..field
+			if value[1] or value[2] then
+				assert(value[1] and value[2])
+				cmd = cmd .. ' [' .. value[1] .. ':' .. value[2] .. ']'
+			end
+			if value[3] then
+				cmd = cmd .. ' ' .. value[3]
+			end
+			cmds:insert(cmd)
+		end
+	end
 
 	if args.unset then
 		for _,cmd in ipairs(args.unset) do
@@ -127,9 +136,9 @@ local function gnuplot(args)
 		cmds:insert'pause -1'
 	end
 	
-	-- without this there's a memory leak bug in later gnuplot versions 
+	-- without this there's a memory leak bug in later gnuplot versions
 	-- https://stackoverflow.com/questions/18654966/how-can-i-prevent-gnuplot-from-eating-my-memory
-	cmds:insert'set output'	
+	cmds:insert'set output'
 	
 	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
 	file[cmdsfilename] = cmds:concat('\n')
