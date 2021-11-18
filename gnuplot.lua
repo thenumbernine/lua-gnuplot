@@ -5,6 +5,13 @@ local range = require 'ext.range'
 local function gnuplot(args)
 	local persist = args.persist
 
+	--[[
+	use this for custom serialization
+	especially for serializing numbers at higher-than-default precision
+	right now this is used for serializing "data" and "griddata"
+	--]]
+	local datatostring = args.tostring or tostring
+
 	local cmds = table()
 	if not persist then
 		local terminal = args.terminal or 'png size 800,600'
@@ -152,7 +159,7 @@ local function gnuplot(args)
 				local s
 				local t = type(args.data[j][i])
 				if t == 'number' then
-					s = args.data[j][i]
+					s = datatostring(args.data[j][i])
 				elseif t== 'string' then
 					s = ('%q'):format(args.data[j][i])
 				else
@@ -172,7 +179,8 @@ local function gnuplot(args)
 			for j,y in ipairs(args.griddata.y) do
 				data:insert(x..'\t'..y)
 				for k=1,#args.griddata do
-					data:insert('\t'..args.griddata[k][i][j])
+					-- TODO same as .data where we wrap strings in quotes?
+					data:insert('\t'..datatostring(args.griddata[k][i][j]))
 				end
 				data:insert('\n')
 			end
