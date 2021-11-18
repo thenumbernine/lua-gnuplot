@@ -2,6 +2,15 @@ local file = require 'ext.file'
 local table = require 'ext.table'
 local range = require 'ext.range'
 
+-- default serialization for gnuplot "data" and "griddata"
+local function defaultdatatostring(x)
+	if type(x) == 'string' then
+		return ('%q'):format(x)
+	else
+		return tostring(x)
+	end
+end
+
 local function gnuplot(args)
 	local persist = args.persist
 
@@ -10,7 +19,7 @@ local function gnuplot(args)
 	especially for serializing numbers at higher-than-default precision
 	right now this is used for serializing "data" and "griddata"
 	--]]
-	local datatostring = args.tostring or tostring
+	local datatostring = args.tostring or defaultdatatostring
 
 	local cmds = table()
 	if not persist then
@@ -156,16 +165,7 @@ local function gnuplot(args)
 		for i=1,numcols do
 			local sep = ''
 			for j=1,#args.data do
-				local s
-				local t = type(args.data[j][i])
-				if t == 'number' then
-					s = datatostring(args.data[j][i])
-				elseif t== 'string' then
-					s = ('%q'):format(args.data[j][i])
-				else
-					s = '-'
-				end
-				data:insert(sep..s)
+				data:insert(sep..datatostring(args.data[j][i]))
 				sep = '\t'
 			end
 			data:insert('\n')
@@ -179,7 +179,6 @@ local function gnuplot(args)
 			for j,y in ipairs(args.griddata.y) do
 				data:insert(x..'\t'..y)
 				for k=1,#args.griddata do
-					-- TODO same as .data where we wrap strings in quotes?
 					data:insert('\t'..datatostring(args.griddata[k][i][j]))
 				end
 				data:insert('\n')
