@@ -52,7 +52,6 @@ local function gnuplot(args)
 	if args.pm3d then cmds:insert('set pm3d'..(args.pm3d == true and '' or ' '..args.pm3d)) end
 	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
-	if args.cbrange then cmds:insert('set cbrange ['..table.concat(args.cbrange, ':')..']') end
 	if args.xtics then cmds:insert('set xtics '..args.xtics) end
 	if args.ytics then cmds:insert('set ytics '..args.ytics) end
 	if args.ztics then cmds:insert('set ztics '..args.ztics) end
@@ -69,15 +68,11 @@ local function gnuplot(args)
 		end
 	end
 	
-	for _,letter in ipairs{'x', 'y', 'z', 't', 'u', 'v'} do
+	for _,letter in ipairs{'x', 'y', 'z', 't', 'u', 'v', 'cb'} do
 		local field = letter..'range'
 		local value = args[field]
 		if value then
-			local cmd = 'set '..field
-			if value[1] or value[2] then
-				assert(value[1] and value[2])
-				cmd = cmd .. ' [' .. value[1] .. ':' .. value[2] .. ']'
-			end
+			local cmd = 'set '..field .. ' [' .. (value[1] or '') .. ':' .. (value[2] or '') .. ']'
 			if value[3] then
 				cmd = cmd .. ' ' .. value[3]
 			end
