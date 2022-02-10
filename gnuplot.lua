@@ -67,6 +67,8 @@ local function gnuplot(args)
 			cmds:insert('set format '..k..' '..('%q'):format(v))
 		end
 	end
+	if args.nokey then cmds:insert'set nokey' end
+	if args.notitle then cmds:insert'set notitle' end
 	
 	for _,letter in ipairs{'x', 'y', 'z', 't', 'u', 'v', 'cb'} do
 		local field = letter..'range'
