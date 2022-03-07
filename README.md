@@ -1,5 +1,9 @@
 A gnuplot wrapper for Lua.
 
+### Installing:
+
+Use the luarocks rockspec, or modify the path as described in my lua-ext project (listed in 'dependencies').
+
 ### Dependencies:
 
 - https://github.com/thenumbernine/lua-ext
@@ -15,7 +19,7 @@ require 'gnuplot'{
 
 ...produces a window containing...
 
-![example1.png](example1.png)
+![images/example1.png](images/example1.png)
 
 
 ``` Lua
@@ -39,7 +43,7 @@ gnuplot{
 
 ...produces...
 
-![example2.png](example2.png)
+![images/example2.png](images/example2.png)
 
 
 ``` Lua
@@ -70,6 +74,4 @@ gnuplot{
 
 ...produces...
 
-![example3.png](example3.png)
-
-
+![images/example3.png](images/example3.png)
