@@ -52,6 +52,7 @@ local function gnuplot(args)
 	if args.pm3d then cmds:insert('set pm3d'..(args.pm3d == true and '' or ' '..args.pm3d)) end
 	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
+	if args.tics then cmds:insert('set tics '..args.tics) end
 	if args.xtics then cmds:insert('set xtics '..args.xtics) end
 	if args.ytics then cmds:insert('set ytics '..args.ytics) end
 	if args.ztics then cmds:insert('set ztics '..args.ztics) end
