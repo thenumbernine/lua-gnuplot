@@ -155,7 +155,7 @@ local function gnuplot(args)
 	cmds:insert'set output'
 	
 	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
-	file[cmdsfilename] = cmds:concat('\n')
+	file(cmdsfilename):write(cmds:concat('\n'))
 
 	if args.data then
 		local data = table()
@@ -168,7 +168,7 @@ local function gnuplot(args)
 			end
 			data:insert('\n')
 		end
-		file[datafilename] = data:concat()
+		file(datafilename):write(data:concat())
 	end
 
 	if args.griddata then
@@ -183,7 +183,7 @@ local function gnuplot(args)
 			end
 			data:insert('\n')
 		end
-		file[datafilename] = data:concat()
+		file(datafilename):write(data:concat())
 	end
 
 	-- some gnuplot errors are errors, some are just warnings ...
@@ -197,17 +197,17 @@ local function gnuplot(args)
 	local results = {os.execute(cmd)}
 	if args.warnOnErrors and results[1] then
 		io.stderr:write('cmds:\n'
-			..require 'template.showcode'(file[cmdsfilename])..'\n'
+			..require 'template.showcode'(file(cmdsfilename):read())..'\n'
 			..'failed with error:\n'
 			..tostring(results[1])..'\n'
 			..tostring(results[2])..'\n')
 	end
 
-	if args.savecmds then file[args.savecmds] = file[cmdsfilename] end
-	if args.savedata then file[args.savedata] = file[datafilename] end
+	if args.savecmds then file(args.savecmds):write(file(cmdsfilename):read()) end
+	if args.savedata then file(args.savedata):write(file(datafilename):read()) end
 
-	file[cmdsfilename] = nil
-	file[datafilename] = nil
+	file(cmdsfilename):remove()
+	file(datafilename):remove()
 end
 
 return gnuplot
