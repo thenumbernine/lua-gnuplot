@@ -70,7 +70,7 @@ local function gnuplot(args)
 	end
 	if args.nokey then cmds:insert'set nokey' end
 	if args.notitle then cmds:insert'set notitle' end
-	
+
 	for _,letter in ipairs{'x', 'y', 'z', 't', 'u', 'v', 'cb'} do
 		local field = letter..'range'
 		local value = args[field]
@@ -113,7 +113,7 @@ local function gnuplot(args)
 			else
 				plotcmd = plot[j] j=j+1
 			end
-			
+
 			for k,v in pairs(plot) do
 				if type(k) == 'string'
 				and k ~= 'using'
@@ -149,11 +149,11 @@ local function gnuplot(args)
 	if persist then
 		cmds:insert'pause -1'
 	end
-	
+
 	-- without this there's a memory leak bug in later gnuplot versions
 	-- https://stackoverflow.com/questions/18654966/how-can-i-prevent-gnuplot-from-eating-my-memory
 	cmds:insert'set output'
-	
+
 	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
 	file(cmdsfilename):write(cmds:concat('\n'))
 
@@ -193,7 +193,7 @@ local function gnuplot(args)
 	end
 	cmdlineargs:insert(cmdsfilename)
 	local cmd = cmdlineargs:concat' '
-	
+
 	local results = {os.execute(cmd)}
 	if args.warnOnErrors and results[1] then
 		io.stderr:write('cmds:\n'
