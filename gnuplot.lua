@@ -50,6 +50,7 @@ local function gnuplot(args)
 	if args.isosamples then cmds:insert('set isosamples'..(args.isosamples == true and '' or ' '..args.isosamples)) end
 	if args.cntrparam then cmds:insert('set cntrparam '..args.cntrparam) end
 	if args.pm3d then cmds:insert('set pm3d'..(args.pm3d == true and '' or ' '..args.pm3d)) end
+	if args.dgrid3d then cmds:insert('set dgrid3d') end
 	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
 	if args.tics then cmds:insert('set tics '..args.tics) end
