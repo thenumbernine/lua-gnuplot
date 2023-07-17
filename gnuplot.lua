@@ -1,4 +1,4 @@
-local file = require 'ext.file'
+local path = require 'ext.path'
 local table = require 'ext.table'
 local range = require 'ext.range'
 
@@ -156,7 +156,7 @@ local function gnuplot(args)
 	cmds:insert'set output'
 
 	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
-	file(cmdsfilename):write(cmds:concat('\n'))
+	path(cmdsfilename):write(cmds:concat('\n'))
 
 	if args.data then
 		local data = table()
@@ -169,7 +169,7 @@ local function gnuplot(args)
 			end
 			data:insert('\n')
 		end
-		file(datafilename):write(data:concat())
+		path(datafilename):write(data:concat())
 	end
 
 	if args.griddata then
@@ -184,7 +184,7 @@ local function gnuplot(args)
 			end
 			data:insert('\n')
 		end
-		file(datafilename):write(data:concat())
+		path(datafilename):write(data:concat())
 	end
 
 	-- some gnuplot errors are errors, some are just warnings ...
@@ -198,17 +198,17 @@ local function gnuplot(args)
 	local results = {os.execute(cmd)}
 	if args.warnOnErrors and results[1] then
 		io.stderr:write('cmds:\n'
-			..require 'template.showcode'(file(cmdsfilename):read())..'\n'
+			..require 'template.showcode'(path(cmdsfilename):read())..'\n'
 			..'failed with error:\n'
 			..tostring(results[1])..'\n'
 			..tostring(results[2])..'\n')
 	end
 
-	if args.savecmds then file(args.savecmds):write(file(cmdsfilename):read()) end
-	if args.savedata then file(args.savedata):write(file(datafilename):read()) end
+	if args.savecmds then path(args.savecmds):write(path(cmdsfilename):read()) end
+	if args.savedata then path(args.savedata):write(path(datafilename):read()) end
 
-	file(cmdsfilename):remove()
-	file(datafilename):remove()
+	path(cmdsfilename):remove()
+	path(datafilename):remove()
 end
 
 return gnuplot
