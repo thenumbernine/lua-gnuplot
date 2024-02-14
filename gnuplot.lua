@@ -28,12 +28,25 @@ local function gnuplot(args)
 		cmds:insert("set output '"..assert(args.output).."'")
 	end
 	if args.log then cmds:insert('set log '..args.log) end
-	if args.xlabel then cmds:insert(('set xlabel %q'):format(args.xlabel)) end
-	if args.ylabel then cmds:insert(('set ylabel %q'):format(args.ylabel)) end
-	if args.zlabel then cmds:insert(('set zlabel %q'):format(args.zlabel)) end
-	if args.cblabel then cmds:insert(('set cblabel %q'):format(args.cblabel)) end
-	if args.title then cmds:insert(('set title %q'):format(args.title)) end
-	if args.key then cmds:insert('set key '..args.key) end
+
+	-- for these fields, 
+	-- if it's a string then quote it
+	-- if it's a table then concat and append 
+	-- ... hmm ...  this is to preserve old behavior of quoting the arg, while supporting non-quoted values ... 
+	-- overall seems dumb.
+	for _,k in ipairs{'key', 'title', 'label', 'xlabel', 'ylabel', 'zlabel', 'cblabel'} do
+		local v = args[k]
+		local tv = type(v)
+		if tv == 'nil' then
+		elseif tv == 'string' then
+			cmds:insert(('set %s %q'):format(k, v))
+		elseif tv == 'table' then
+			cmds:insert('set '..k..' '..table.concat(v, ' '))
+		else
+			error("idk how to handle type "..tv..' for key '..k)
+		end
+	end
+	
 	if args.border then cmds:insert('set border '..args.border) end
 	if args.style then
 		if type(args.style) == 'table' then
@@ -123,7 +136,13 @@ local function gnuplot(args)
 				and k ~= 'datafile'
 				and k ~= 'palette'
 				then
-					if k == 'title' then v = ('%q'):format(v) end
+					if k == 'title' then
+						if type(v) == 'string' then
+							v = ('%q'):format(v)
+						elseif type(v) == 'table' then
+							v = table.concat(v, ' ')
+						end
+					end
 					if v == true then
 						plotcmd = plotcmd..' '..k
 					else
