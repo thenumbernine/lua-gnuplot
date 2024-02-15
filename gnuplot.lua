@@ -67,12 +67,15 @@ local function gnuplot(args)
 	if args.dgrid3d then cmds:insert('set dgrid3d'..(args.dgrid3d == true and '' or ' '..args.dgrid3d)) end
 	if args.palette then cmds:insert('set palette '..args.palette) end
 	if args.datafile then cmds:insert('set datafile '..args.datafile) end
+	if args.grid then cmds:insert('set grid '..args.grid) end
 	if args.tics then cmds:insert('set tics '..args.tics) end
 	if args.xtics then cmds:insert('set xtics '..args.xtics) end
 	if args.ytics then cmds:insert('set ytics '..args.ytics) end
 	if args.ztics then cmds:insert('set ztics '..args.ztics) end
 	if args.x2tics then cmds:insert('set x2tics '..args.x2tics) end
 	if args.y2tics then cmds:insert('set y2tics '..args.y2tics) end
+	if args.mxtics then cmds:insert('set mxtics '..args.mxtics) end
+	if args.mytics then cmds:insert('set mytics '..args.mytics) end
 	if args.cbtics then cmds:insert('set cbtics '..args.cbtics) end
 	if args.boxwidth then cmds:insert('set boxwidth '..args.boxwidth) end
 	if args.xdata then cmds:insert('set xdata '..args.xdata) end
