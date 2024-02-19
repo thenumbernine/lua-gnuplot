@@ -218,13 +218,15 @@ local function gnuplot(args)
 	cmdlineargs:insert(cmdsfilename)
 	local cmd = cmdlineargs:concat' '
 
-	local results = {os.execute(cmd)}
-	if args.warnOnErrors and results[1] then
-		io.stderr:write('cmds:\n'
-			..require 'template.showcode'(path(cmdsfilename):read())..'\n'
-			..'failed with error:\n'
-			..tostring(results[1])..'\n'
-			..tostring(results[2])..'\n')
+	local results = table.pack(os.execute(cmd))
+	if args.warnOnErrors then
+		if results[1] then
+			io.stderr:write('cmds:\n'
+				..require 'template.showcode'(path(cmdsfilename):read())..'\n'
+				..'failed with error:\n'
+				..tostring(results[1])..'\n'
+				..tostring(results[2])..'\n')
+		end
 	end
 
 	if args.savecmds then path(args.savecmds):write(path(cmdsfilename):read()) end
@@ -232,6 +234,8 @@ local function gnuplot(args)
 
 	path(cmdsfilename):remove()
 	path(datafilename):remove()
+
+	return results:unpack()
 end
 
 return gnuplot
