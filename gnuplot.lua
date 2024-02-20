@@ -126,7 +126,11 @@ local function gnuplot(args)
 			local j=1
 			local plotcmd
 			if plotdatafile then
-				plotcmd =  "'"..plotdatafile.."'"
+				if type(plotdatafile) == 'table' then
+					plotcmd =  table.concat(plotdatafile, ' ')
+				else
+					plotcmd =  "'"..plotdatafile.."'"
+				end
 				if plot.using then plotcmd = plotcmd .. " using "..plot.using end
 			else
 				plotcmd = plot[j] j=j+1
