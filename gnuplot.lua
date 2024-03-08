@@ -2,6 +2,16 @@ local path = require 'ext.path'
 local table = require 'ext.table'
 local range = require 'ext.range'
 
+--[[
+local function findfile(prefix, suffix)
+	-- if you have more than 100 plots running in tandem then you are out of luck.
+	for i=1,100 do
+		local fn = prefix..'.'..i..'.'..suffix
+		local f = io.open(fn,  ... TODO how to create if not exists and fail if exists? to prevent race conditions ...
+	end
+end
+--]]
+
 -- default serialization for gnuplot "data" and "griddata"
 local function defaultdatatostring(x)
 	if type(x) == 'string' then
@@ -113,7 +123,10 @@ local function gnuplot(args)
 	end
 	local plotcmds = table()
 	local splotcmds = table()
-	local datafilename = '___tmp.gnuplot.data.txt'
+	--local datafilename = '___tmp.gnuplot.data.txt'	-- has collisions ...
+	--local datafilename = findfile('___tmp.gnuplot.data', 'txt') -- Lua has no function for create-only-if-not-present ... like python's open"wx" ... so this will have collisions too.
+	--local datafilename = os.tmpfile()	-- has no filename, and by design, so other processes cannot see it: https://en.cppreference.com/w/c/io/tmpfile
+	local datafilename = os.tmpname() -- is buggy on Windows.
 	for i=1,#args do
 		if type(args[i]) == 'table' then
 			local plot = args[i]
@@ -182,7 +195,8 @@ local function gnuplot(args)
 	-- https://stackoverflow.com/questions/18654966/how-can-i-prevent-gnuplot-from-eating-my-memory
 	cmds:insert'set output'
 
-	local cmdsfilename = '___tmp.gnuplot.cmds.txt'
+	--local cmdsfilename = '___tmp.gnuplot.cmds.txt'
+	local cmdsfilename = os.tmpname()
 	path(cmdsfilename):write(cmds:concat('\n'))
 
 	if args.data then
@@ -236,6 +250,7 @@ local function gnuplot(args)
 	if args.savecmds then path(args.savecmds):write(path(cmdsfilename):read()) end
 	if args.savedata then path(args.savedata):write(path(datafilename):read()) end
 
+	-- TODO xpcall to ensure these are deleted?
 	path(cmdsfilename):remove()
 	path(datafilename):remove()
 
