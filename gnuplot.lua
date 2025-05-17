@@ -1,5 +1,6 @@
 local path = require 'ext.path'
 local table = require 'ext.table'
+local class = require 'ext.class'
 local range = require 'ext.range'
 
 --[[
@@ -21,7 +22,9 @@ local function defaultdatatostring(x)
 	end
 end
 
-local function gnuplot(args)
+local GNUPlot = class()
+
+function GNUPlot:__call(args)
 	local persist = args.persist
 
 	--[[
@@ -236,7 +239,7 @@ local function gnuplot(args)
 	cmdlineargs:insert(cmdsfilename)
 	local cmd = cmdlineargs:concat' '
 
-	local results = table.pack(os.execute(cmd))
+	local results = table.pack(self:exec(cmd))
 	if args.warnOnErrors then
 		if results[1] then
 			io.stderr:write('cmds:\n'
@@ -257,4 +260,8 @@ local function gnuplot(args)
 	return results:unpack()
 end
 
-return gnuplot
+function GNUPlot:exec(cmd)
+	return os.execute(cmd)
+end
+
+return GNUPlot()
