@@ -198,8 +198,7 @@ function GNUPlot:__call(args)
 	-- https://stackoverflow.com/questions/18654966/how-can-i-prevent-gnuplot-from-eating-my-memory
 	cmds:insert'set output'
 
-	--local cmdsfilename = '___tmp.gnuplot.cmds.txt'
-	local cmdsfilename = os.tmpname()
+	local cmdsfilename = self:getCmdTmpName()
 	path(cmdsfilename):write(cmds:concat('\n'))
 
 	if args.data then
@@ -258,6 +257,11 @@ function GNUPlot:__call(args)
 	path(datafilename):remove()
 
 	return results:unpack()
+end
+
+function GNUPlot:getCmdTmpName()
+	--return '___tmp.gnuplot.cmds.txt'
+	return os.tmpname()
 end
 
 function GNUPlot:exec(cmd)
