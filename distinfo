@@ -1,12 +1,17 @@
+--------------------------------------------
+-- generated with dist/build-distinfo.rua --
+--------------------------------------------
+
 name = "gnuplot"
 files = {
-	["LICENSE"] = "gnuplot/LICENSE",
-	["README.md"] = "gnuplot/README.md",
-	["gnuplot-dev-1.rockspec"] = "gnuplot/gnuplot-dev-1.rockspec",
-	["gnuplot.lua"] = "gnuplot/gnuplot.lua",
-	["images/example1.png"] = "gnuplot/images/example1.png",
-	["images/example2.png"] = "gnuplot/images/example2.png",
-	["images/example3.png"] = "gnuplot/images/example3.png",
+	"LICENSE",
+	"README.md",
+	"distinfo",
+	"gnuplot-dev-1.rockspec",
+	"gnuplot.lua",
+	"images/example1.png",
+	"images/example2.png",
+	"images/example3.png",
 }
 deps = {
 	"ext",
