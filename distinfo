@@ -3,6 +3,8 @@
 --------------------------------------------
 
 name = "gnuplot"
+git = "https://github.com/thenumbernine/lua-gnuplot"
+
 files = {
 	"LICENSE",
 	"README.md",
