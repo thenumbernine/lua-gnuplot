@@ -15,7 +15,7 @@ Use the luarocks rockspec, or modify the path as described in my lua-ext project
 ``` Lua
 require 'gnuplot'{
 	persist = true,
-	{'x**2'},	
+	{'x**2'},
 }
 ```
 
