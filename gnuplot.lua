@@ -42,10 +42,10 @@ function GNUPlot:__call(args)
 	end
 	if args.log then cmds:insert('set log '..args.log) end
 
-	-- for these fields, 
+	-- for these fields,
 	-- if it's a string then quote it
-	-- if it's a table then concat and append 
-	-- ... hmm ...  this is to preserve old behavior of quoting the arg, while supporting non-quoted values ... 
+	-- if it's a table then concat and append
+	-- ... hmm ...  this is to preserve old behavior of quoting the arg, while supporting non-quoted values ...
 	-- overall seems dumb.
 	for _,k in ipairs{'key', 'title', 'label', 'xlabel', 'ylabel', 'zlabel', 'cblabel'} do
 		local v = args[k]
@@ -59,7 +59,7 @@ function GNUPlot:__call(args)
 			error("idk how to handle type "..tv..' for key '..k)
 		end
 	end
-	
+
 	if args.border then cmds:insert('set border '..args.border) end
 	if args.style then
 		if type(args.style) == 'table' then
